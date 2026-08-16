@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  OPERATOR
+  VIEWER
+}
+
+enum DeviceStatus {
+  ONLINE
+  OFFLINE
+  DEGRADED
+}
+
+model User {
+  id String @id
+  name String
+  email String @unique
+  emailVerified Boolean @default(false)
+  image String?
+  role Role @default(VIEWER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sessions Session[]
+  accounts Account[]
+  @@map("user")
+}
+
+model Session {
+  id String @id
+  expiresAt DateTime
+  token String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id String @id
+  accountId String
+  providerId String
+  userId String
+  accessToken String?
+  refreshToken String?
+  idToken String?
+  accessTokenExpiresAt DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope String?
+  password String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id String @id
+  identifier String
+  value String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Device {
+  id String @id
+  name String
+  status DeviceStatus @default(OFFLINE)
+  lastSeenAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  credentials DeviceCredential[]
+  sessions RecognitionSession[]
+  events RecognitionEvent[]
+}
+
+model DeviceCredential {
+  id String @id @default(cuid())
+  deviceId String
+  keyId String @unique
+  secretHash String
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  @@index([deviceId])
+}
+
+model RecognitionSession {
+  id String @id @default(cuid())
+  deviceId String
+  startedAt DateTime @default(now())
+  endedAt DateTime?
+  createdAt DateTime @default(now())
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Restrict)
+  events RecognitionEvent[]
+  @@index([deviceId])
+}
+
+model RecognitionEvent {
+  id String @id @default(cuid())
+  eventId String @unique
+  sessionId String?
+  deviceId String
+  label String
+  text String
+  confidence Float
+  occurredAt DateTime
+  receivedAt DateTime @default(now())
+  session RecognitionSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Restrict)
+  @@index([deviceId])
+  @@index([sessionId])
+  @@index([occurredAt])
+}

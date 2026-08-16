@@ -1,0 +1,3 @@
+import { Module } from '@nestjs/common';
+import { DatabaseModule } from './core/database/database.module'; import { AuthModule } from './auth/auth.module'; import { DevicesModule } from './modules/devices/devices.module'; import { RecognitionModule } from './modules/recognition/recognition.module'; import { SessionsModule } from './modules/sessions/sessions.module'; import { HealthModule } from './modules/health/health.module'; import { RealtimeModule } from './realtime/realtime.module'; import { LanguageModule } from './modules/language/language.module';
+@Module({ imports: [DatabaseModule, AuthModule, DevicesModule, RecognitionModule, SessionsModule, HealthModule, RealtimeModule, LanguageModule] }) export class AppModule {}
