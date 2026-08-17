@@ -1,6 +1,6 @@
 import { z } from 'zod';
 const schema = z.object({
-  edgeAiUrl: z.string().url(),
+  edgeAiUrl: z.string().url().default('http://localhost:8082'),
   deviceId: z.string().min(1).default('uno-q-demo'),
   environment: z.string().default('development'),
 });
