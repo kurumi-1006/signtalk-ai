@@ -1,6 +1,6 @@
-name: SignBridge Edge AI
+name: SignTalk Edge AI
 icon: "🤟"
 description: VSL sign-language recognition Edge AI on Arduino UNO Q.
 
 bricks:
-  - signbridge-stack
+  - signtalk-stack

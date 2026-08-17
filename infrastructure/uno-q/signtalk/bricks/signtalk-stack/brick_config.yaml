@@ -1,3 +1,3 @@
-id: signbridge-stack
-name: SignBridge NestJS and Edge AI Stack
+id: signtalk-stack
+name: SignTalk Edge AI Stack
 description: Local NestJS API, PostgreSQL, Redis, and Vietnamese Sign Language Edge AI.

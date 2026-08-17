@@ -1,7 +1,7 @@
 # SignTalk Full Stack for UNO Q
 
 Import this ZIP in Arduino App Lab, then press **Run**. App Lab builds and
-starts the custom `signbridge-stack` Docker Brick:
+starts the custom `signtalk-stack` Docker Brick:
 
 - Edge AI upload API: `http://UNO_Q_IP:8082/predict`
 
