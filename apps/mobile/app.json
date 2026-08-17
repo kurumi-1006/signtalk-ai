@@ -9,8 +9,8 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "SIGNTALK cần camera để nhận diện ngôn ngữ ký hiệu.",
-          "microphonePermission": "SIGNTALK cần microphone khi quay clip nhận diện."
+          "cameraPermission": "SIGNTALK needs camera access to recognize sign language.",
+          "microphonePermission": "SIGNTALK needs microphone access while recording recognition clips."
         }
       ],
       "expo-video"

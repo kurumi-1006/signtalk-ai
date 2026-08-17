@@ -20,39 +20,39 @@ export default function Session() {
       <ScrollView contentContainerStyle={styles.page}>
         <View style={styles.header}>
           <Pressable onPress={() => router.back()} style={styles.iconButton}><Ionicons name="arrow-back" size={20} color="#34433C" /></Pressable>
-          <Text style={styles.headerTitle}>Chi tiết phiên</Text>
-          <Pressable onPress={() => Alert.alert('Xuất bản ghi', 'Bản ghi sẽ được xuất khi có dữ liệu.')} style={styles.iconButton}>
+          <Text style={styles.headerTitle}>Session details</Text>
+          <Pressable onPress={() => Alert.alert('Export transcript', 'The transcript will be exported when data is available.')} style={styles.iconButton}>
             <Ionicons name="download-outline" size={20} color="#34433C" />
           </Pressable>
         </View>
 
         <View style={styles.hero}>
-          <View style={styles.liveRow}><View style={styles.liveDot} /><Text style={styles.liveLabel}>{id === 'live' ? 'ĐANG HOẠT ĐỘNG' : 'ĐÃ LƯU'}</Text></View>
-          <Text style={styles.heroTitle}>Phiên nhận diện</Text>
-          <Text style={styles.heroMeta}>Bắt đầu lúc {started} • {events.length} kết quả</Text>
+          <View style={styles.liveRow}><View style={styles.liveDot} /><Text style={styles.liveLabel}>{id === 'live' ? 'ACTIVE' : 'SAVED'}</Text></View>
+          <Text style={styles.heroTitle}>Recognition session</Text>
+          <Text style={styles.heroMeta}>Started at {started} • {events.length} results</Text>
         </View>
 
         <View style={styles.stats}>
-          <Stat icon="chatbubble-outline" value={String(events.length)} label="Kết quả" />
+          <Stat icon="chatbubble-outline" value={String(events.length)} label="Results" />
           <View style={styles.ruleVertical} />
-          <Stat icon="analytics-outline" value={events.length ? `${average}%` : '—'} label="Tin cậy TB" />
+          <Stat icon="analytics-outline" value={events.length ? `${average}%` : '—'} label="Avg. confidence" />
         </View>
 
-        <Text style={styles.sectionTitle}>Bản ghi phiên</Text>
+        <Text style={styles.sectionTitle}>Session transcript</Text>
         <View style={styles.list}>
           {events.length ? events.map((event, index) => (
             <View key={event.eventId} style={[styles.row, index > 0 && styles.rowBorder]}>
               <View style={styles.rowIndex}><Text style={styles.rowIndexText}>{index + 1}</Text></View>
               <View style={styles.rowCopy}>
                 <Text style={styles.rowText}>{event.payload.text}</Text>
-                <Text style={styles.rowMeta}>{event.payload.label} • {Math.round(event.payload.confidence * 100)}% tin cậy</Text>
+                <Text style={styles.rowMeta}>{event.payload.label} • {Math.round(event.payload.confidence * 100)}% confidence</Text>
               </View>
               <Ionicons name="checkmark-circle" size={19} color="#7E9845" />
             </View>
           )) : (
             <View style={styles.empty}>
               <Ionicons name="document-text-outline" size={27} color="#77837C" />
-              <Text style={styles.emptyText}>Chưa có kết quả trong phiên này.</Text>
+              <Text style={styles.emptyText}>There are no results in this session yet.</Text>
             </View>
           )}
         </View>

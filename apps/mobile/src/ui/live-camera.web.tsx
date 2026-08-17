@@ -15,12 +15,12 @@ const wait = (milliseconds: number) =>
 const captureJpeg = (canvas: HTMLCanvasElement, timeoutMs = 2_000) =>
   new Promise<Blob>((resolve, reject) => {
     const timeout = window.setTimeout(() => {
-      reject(new Error('Camera không phản hồi khi tạo ảnh. Hãy bật lại camera rồi thử lại.'));
+      reject(new Error('The camera did not respond while capturing an image. Turn it back on and try again.'));
     }, timeoutMs);
     canvas.toBlob((blob) => {
       window.clearTimeout(timeout);
       if (!blob || blob.size <= 512) {
-        reject(new Error('Không thể lấy frame hợp lệ từ camera. Hãy giữ tab này ở màn hình chính rồi thử lại.'));
+        reject(new Error('Unable to get a valid frame from the camera. Keep this tab on the main screen and try again.'));
         return;
       }
       resolve(blob);
@@ -42,7 +42,7 @@ export const LiveCamera = forwardRef<CameraHandle, Props>(function LiveCamera(
     const start = async () => {
       try {
         if (!navigator.mediaDevices?.getUserMedia) {
-          throw new Error('Trình duyệt này không hỗ trợ truy cập camera.');
+          throw new Error('This browser does not support camera access.');
         }
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: false,
@@ -55,7 +55,7 @@ export const LiveCamera = forwardRef<CameraHandle, Props>(function LiveCamera(
         openedStream = stream;
         streamRef.current = stream;
         const handler = () => {
-          if (active) onError('Camera đã bị ngắt bởi trình duyệt hoặc ứng dụng khác. Hãy thử lại.');
+          if (active) onError('The camera was disconnected by the browser or another app. Please try again.');
         };
         onTrackEnded = handler;
         stream.getVideoTracks().forEach((track) => track.addEventListener('ended', handler));
@@ -66,8 +66,8 @@ export const LiveCamera = forwardRef<CameraHandle, Props>(function LiveCamera(
         onReady();
       } catch (value) {
         const message = value instanceof DOMException && value.name === 'NotAllowedError'
-          ? 'Quyền camera đang bị chặn. Hãy cho phép camera trong thanh địa chỉ rồi thử lại.'
-          : value instanceof Error ? value.message : 'Không thể mở camera trên trình duyệt.';
+          ? 'Camera permission is blocked. Allow it in the address bar, then try again.'
+          : value instanceof Error ? value.message : 'Unable to open the camera in this browser.';
         onError(message);
       }
     };
@@ -86,12 +86,12 @@ export const LiveCamera = forwardRef<CameraHandle, Props>(function LiveCamera(
       const stream = streamRef.current;
       const video = videoRef.current;
       if (!stream || !video || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA || !video.videoWidth) {
-        const message = 'Camera chưa sẵn sàng. Hãy chờ hình xem trước xuất hiện rồi thử lại.';
+        const message = 'The camera is not ready yet. Wait for the preview to appear, then try again.';
         onError(message);
         throw new Error(message);
       }
       if (!stream.getVideoTracks().some((track) => track.readyState === 'live')) {
-        const message = 'Luồng camera đã dừng. Hãy bật lại camera rồi thử lại.';
+        const message = 'The camera stream has stopped. Turn the camera back on and try again.';
         onError(message);
         throw new Error(message);
       }
@@ -109,7 +109,7 @@ export const LiveCamera = forwardRef<CameraHandle, Props>(function LiveCamera(
       canvas.width = 640;
       canvas.height = 480;
       const context = canvas.getContext('2d', { alpha: false });
-      if (!context) throw new Error('Không thể khởi tạo bộ chụp frame.');
+      if (!context) throw new Error('Unable to initialize frame capture.');
 
       const captureFrame = () => {
         context.drawImage(
@@ -133,7 +133,7 @@ export const LiveCamera = forwardRef<CameraHandle, Props>(function LiveCamera(
       const deadline = performance.now() + maxDuration * 1000;
       while (!stopRequestedRef.current && performance.now() < deadline && frames.length < maxFrames) {
         if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA || !stream.getVideoTracks().some((track) => track.readyState === 'live')) {
-          const message = 'Luồng camera bị gián đoạn khi đang ghi. Hãy thử lại.';
+          const message = 'The camera stream was interrupted during recording. Please try again.';
           onError(message);
           throw new Error(message);
         }
@@ -143,7 +143,7 @@ export const LiveCamera = forwardRef<CameraHandle, Props>(function LiveCamera(
         await wait(frameInterval);
       }
       if (frames.length < 4) {
-        const message = 'Camera chưa tạo đủ frame. Hãy giữ nhận diện ít nhất một giây.';
+        const message = 'The camera did not produce enough frames. Keep recognition running for at least one second.';
         onError(message);
         throw new Error(message);
       }

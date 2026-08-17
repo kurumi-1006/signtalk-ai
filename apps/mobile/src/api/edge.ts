@@ -18,17 +18,17 @@ export type EdgeModel = { id: string; name: string; type: string };
 export type EdgeModels = { active_model_id: string; models: EdgeModel[] };
 
 export async function getEdgeModels(): Promise<EdgeModels> {
-  if (!env.edgeAiUrl) throw new Error('Chưa cấu hình EXPO_PUBLIC_EDGE_AI_URL.');
+  if (!env.edgeAiUrl) throw new Error('EXPO_PUBLIC_EDGE_AI_URL is not configured.');
   const response = await fetch(`${env.edgeAiUrl}/models`);
-  if (!response.ok) throw new Error('Không thể tải danh sách mô hình.');
+  if (!response.ok) throw new Error('Unable to load the model list.');
   return response.json() as Promise<EdgeModels>;
 }
 
 export async function activateEdgeModel(modelId: string): Promise<string> {
-  if (!env.edgeAiUrl) throw new Error('Chưa cấu hình EXPO_PUBLIC_EDGE_AI_URL.');
+  if (!env.edgeAiUrl) throw new Error('EXPO_PUBLIC_EDGE_AI_URL is not configured.');
   const response = await fetch(`${env.edgeAiUrl}/models/${encodeURIComponent(modelId)}/activate`, { method: 'POST' });
   const payload: unknown = await response.json();
-  if (!response.ok) throw new Error(typeof payload === 'object' && payload && 'detail' in payload ? String(payload.detail) : 'Không thể đổi mô hình.');
+  if (!response.ok) throw new Error(typeof payload === 'object' && payload && 'detail' in payload ? String(payload.detail) : 'Unable to switch models.');
   return String((payload as { active_model_id: string }).active_model_id);
 }
 
@@ -39,11 +39,11 @@ async function submitRecognition(body: FormData): Promise<RecognitionResult> {
     throw new Error(
       typeof payload === 'object' && payload && 'detail' in payload
         ? String(payload.detail)
-        : 'Edge AI không thể nhận diện clip.',
+        : 'Edge AI could not recognize the clip.',
     );
   }
   const event = recognitionEventSchema.safeParse((payload as { event?: unknown }).event);
-  if (!event.success) throw new Error('Edge AI trả về kết quả không đúng định dạng.');
+  if (!event.success) throw new Error('Edge AI returned an invalid result format.');
   const rawDiagnostics = (payload as { diagnostics?: unknown }).diagnostics;
   const diagnostics = typeof rawDiagnostics === 'object' && rawDiagnostics
     ? Object.fromEntries(
@@ -64,7 +64,7 @@ function sampleFrames(frames: Blob[], count = 56): Blob[] {
 }
 
 export async function recognizeVideo(clip: CapturedClip): Promise<RecognitionResult> {
-  if (!env.edgeAiUrl) throw new Error('Chưa cấu hình EXPO_PUBLIC_EDGE_AI_URL.');
+  if (!env.edgeAiUrl) throw new Error('EXPO_PUBLIC_EDGE_AI_URL is not configured.');
   const body = new FormData();
   body.append('device_id', env.deviceId);
 
@@ -82,7 +82,7 @@ export async function recognizeVideo(clip: CapturedClip): Promise<RecognitionRes
 }
 
 export async function recognizeUploadedVideo(upload: UploadedVideo): Promise<RecognitionResult> {
-  if (!env.edgeAiUrl) throw new Error('Chưa cấu hình EXPO_PUBLIC_EDGE_AI_URL.');
+  if (!env.edgeAiUrl) throw new Error('EXPO_PUBLIC_EDGE_AI_URL is not configured.');
   const body = new FormData();
   body.append('device_id', env.deviceId);
   if (upload.file) {

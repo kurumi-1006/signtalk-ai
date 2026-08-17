@@ -19,9 +19,9 @@ export default function History() {
         <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
           <View style={styles.header}>
             <View>
-              <Text style={styles.kicker}>HOẠT ĐỘNG</Text>
-              <Text style={styles.title}>Lịch sử nhận diện</Text>
-              <Text style={styles.subtitle}>Xem lại các câu và độ tin cậy của mô hình.</Text>
+              <Text style={styles.kicker}>ACTIVITY</Text>
+              <Text style={styles.title}>Recognition history</Text>
+              <Text style={styles.subtitle}>Review sentences and model confidence.</Text>
             </View>
             <Pressable onPress={() => router.push('/settings')} style={styles.iconButton}>
               <Ionicons name="settings-outline" size={20} color="#34433C" />
@@ -31,9 +31,9 @@ export default function History() {
           <Pressable onPress={() => router.push('/session/live')} style={styles.sessionCard}>
             <View style={styles.sessionIcon}><Ionicons name="radio-outline" size={21} color="#DFF4A7" /></View>
             <View style={styles.sessionCopy}>
-              <Text style={styles.sessionKicker}>PHIÊN HIỆN TẠI</Text>
-              <Text style={styles.sessionTitle}>Nhận diện trực tiếp</Text>
-              <Text style={styles.sessionMeta}>{events.length} kết quả đã ghi nhận</Text>
+              <Text style={styles.sessionKicker}>CURRENT SESSION</Text>
+              <Text style={styles.sessionTitle}>Live recognition</Text>
+              <Text style={styles.sessionMeta}>{events.length} results recorded</Text>
             </View>
             <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
           </Pressable>
@@ -41,13 +41,13 @@ export default function History() {
           <View style={styles.toolbar}>
             <View style={styles.segment}>
               <Pressable onPress={() => setFilter('today')} style={[styles.segmentItem, filter === 'today' && styles.segmentActive]}>
-                <Text style={[styles.segmentText, filter === 'today' && styles.segmentTextActive]}>Hôm nay</Text>
+                <Text style={[styles.segmentText, filter === 'today' && styles.segmentTextActive]}>Today</Text>
               </Pressable>
               <Pressable onPress={() => setFilter('all')} style={[styles.segmentItem, filter === 'all' && styles.segmentActive]}>
-                <Text style={[styles.segmentText, filter === 'all' && styles.segmentTextActive]}>Tất cả</Text>
+                <Text style={[styles.segmentText, filter === 'all' && styles.segmentTextActive]}>All</Text>
               </Pressable>
             </View>
-            <Text style={styles.count}>{rows.length} kết quả</Text>
+            <Text style={styles.count}>{rows.length} results</Text>
           </View>
 
           <View style={styles.list}>
@@ -56,17 +56,17 @@ export default function History() {
                 <View style={styles.rowIcon}><Ionicons name="hand-left-outline" size={19} color="#435149" /></View>
                 <View style={styles.rowCopy}>
                   <Text style={styles.rowText}>{event.payload.text}</Text>
-                  <Text style={styles.rowMeta}>{event.payload.label} • {Math.round(event.payload.confidence * 100)}% tin cậy</Text>
+                  <Text style={styles.rowMeta}>{event.payload.label} • {Math.round(event.payload.confidence * 100)}% confidence</Text>
                 </View>
                 <Pressable style={styles.playButton}><Ionicons name="play" size={14} color="#36443D" /></Pressable>
               </View>
             )) : (
               <View style={styles.empty}>
                 <View style={styles.emptyIcon}><Ionicons name="time-outline" size={26} color="#718078" /></View>
-                <Text style={styles.emptyTitle}>Chưa có lịch sử</Text>
-                <Text style={styles.emptyText}>Bắt đầu một phiên nhận diện để xem kết quả tại đây.</Text>
+                <Text style={styles.emptyTitle}>No history yet</Text>
+                <Text style={styles.emptyText}>Start a recognition session to see results here.</Text>
                 <Pressable onPress={() => router.replace('/')} style={styles.emptyButton}>
-                  <Text style={styles.emptyButtonText}>Mở camera</Text>
+                  <Text style={styles.emptyButtonText}>Open camera</Text>
                   <Ionicons name="arrow-forward" size={16} color="#142019" />
                 </Pressable>
               </View>

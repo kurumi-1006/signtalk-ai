@@ -45,7 +45,7 @@ const displayGloss = (label?: string) => isMultiVslGloss(label)
   : label ?? '—';
 
 const logRuntimeDiagnostics = (source: 'camera' | 'upload', diagnostics: PipelineDiagnostics) => {
-  console.log('[SignTalk Edge AI] Thống kê xử lý', {
+  console.log('[SignTalk Edge AI] Processing statistics', {
     source,
     decodedFrames: diagnostics.input_frames ?? diagnostics.decoded_frames,
     sampledFrames: diagnostics.sampled_frames,
@@ -139,38 +139,38 @@ export default function Home() {
     setCapturedFrames(0);
     setIsRecognizing(true);
     setPipelineLogs([
-      { title: '1. Ghi chuyển động', detail: 'Đang chuẩn bị chuỗi 56 frame cho VSL-30…', status: 'active' },
-      { title: '2. Gửi Edge AI', detail: 'Gửi tối đa 56 JPEG trong 3 giây.', status: 'pending' },
-      { title: '3. Trích xuất keypoint', detail: 'MediaPipe Holistic đọc 33 pose + 42 điểm tay.', status: 'pending' },
-      { title: '4. Chuẩn hoá chuỗi', detail: '48 time-step • 75 keypoint • chuẩn hoá theo vai.', status: 'pending' },
-      { title: '5. VSL-30 suy luận', detail: 'Softmax classifier • 30 gloss tiếng Việt.', status: 'pending' },
-      { title: '6. Kiểm tra độ tin cậy', detail: 'Đối chiếu confidence và khoảng cách top-2.', status: 'pending' },
+      { title: '1. Record motion', detail: 'Preparing a 56-frame sequence for VSL-30…', status: 'active' },
+      { title: '2. Send to Edge AI', detail: 'Send up to 56 JPEGs in 3 seconds.', status: 'pending' },
+      { title: '3. Extract keypoints', detail: 'MediaPipe Holistic reads 33 pose + 42 hand points.', status: 'pending' },
+      { title: '4. Normalize sequence', detail: '48 time steps • 75 keypoints • shoulder normalized.', status: 'pending' },
+      { title: '5. VSL-30 inference', detail: 'Softmax classifier • 30 Vietnamese glosses.', status: 'pending' },
+      { title: '6. Verify confidence', detail: 'Compare confidence and the top-2 margin.', status: 'pending' },
     ]);
 
     while (runningRef.current) {
       try {
         setPipelineLogs((logs) => logs.map((log, index) => index === 0
-          ? { ...log, detail: 'Đang ghi chuyển động tay trong 3 giây…', status: 'active' }
+          ? { ...log, detail: 'Recording hand motion for 3 seconds…', status: 'active' }
           : { ...log, status: 'pending' }));
         setCapturedFrames(0);
         const clip = await cameraRef.current.recordAsync(VSL30_CAPTURE);
         if (!clip || !runningRef.current) continue;
         setIsProcessing(true);
         setPipelineLogs((logs) => logs.map((log, index) => {
-          if (index === 0) return { ...log, detail: `Đã ghi ${'frames' in clip ? clip.frames.length : 'video'} nguồn.`, status: 'done' };
-          if (index === 1) return { ...log, detail: 'Đang tải clip tới Edge AI…', status: 'active' };
+          if (index === 0) return { ...log, detail: `Recorded ${'frames' in clip ? clip.frames.length : 'video'} source.`, status: 'done' };
+          if (index === 1) return { ...log, detail: 'Uploading the clip to Edge AI…', status: 'active' };
           return log;
         }));
         const { event, diagnostics } = await recognizeVideo(clip);
         logRuntimeDiagnostics('camera', diagnostics);
         const milliseconds = (key: string) => `${Math.round(Number(diagnostics[key] ?? 0))} ms`;
         setPipelineLogs([
-          { title: '1. Ghi chuyển động', detail: `${diagnostics.received_frames ?? diagnostics.input_frames ?? '—'} frame nguồn đã sẵn sàng.`, status: 'done' },
-          { title: '2. Gửi Edge AI', detail: `${diagnostics.input_mode === 'jpeg_frames' ? 'JPEG frames' : 'Video clip'} • ${milliseconds('jpeg_decode_ms')}`, status: 'done' },
-          { title: '3. Trích xuất keypoint', detail: `${diagnostics.input_frames ?? diagnostics.decoded_frames ?? '—'} → ${diagnostics.mediapipe_input_frames ?? '—'} frame MediaPipe`, status: 'done' },
-          { title: '4. Chuẩn hoá chuỗi', detail: `${diagnostics.sampled_frames ?? 48} time-step • 75 keypoint • theo vai`, status: 'done' },
-          { title: '5. VSL-30 suy luận', detail: `${diagnostics.model_name ?? 'VSL-30'} • softmax 30 gloss`, status: 'done' },
-          { title: '6. Kiểm tra độ tin cậy', detail: `${Math.round(event.payload.confidence * 100)}% • margin ${Math.round((event.payload.margin ?? 0) * 100)}% • ${milliseconds('total_request_ms')}`, status: 'done' },
+          { title: '1. Record motion', detail: `${diagnostics.received_frames ?? diagnostics.input_frames ?? '—'} source frames ready.`, status: 'done' },
+          { title: '2. Send to Edge AI', detail: `${diagnostics.input_mode === 'jpeg_frames' ? 'JPEG frames' : 'Video clip'} • ${milliseconds('jpeg_decode_ms')}`, status: 'done' },
+          { title: '3. Extract keypoints', detail: `${diagnostics.input_frames ?? diagnostics.decoded_frames ?? '—'} → ${diagnostics.mediapipe_input_frames ?? '—'} MediaPipe frames`, status: 'done' },
+          { title: '4. Normalize sequence', detail: `${diagnostics.sampled_frames ?? 48} time steps • 75 keypoints • shoulder normalized`, status: 'done' },
+          { title: '5. VSL-30 inference', detail: `${diagnostics.model_name ?? 'VSL-30'} • softmax 30 glosses`, status: 'done' },
+          { title: '6. Verify confidence', detail: `${Math.round(event.payload.confidence * 100)}% • margin ${Math.round((event.payload.margin ?? 0) * 100)}% • ${milliseconds('total_request_ms')}`, status: 'done' },
         ]);
         setEvent(event);
         const confidence = event.payload.confidence;
@@ -183,8 +183,8 @@ export default function Home() {
         if (!accepted) {
           pendingCandidateRef.current = undefined;
           setQualityHint(handCoverage < 0.5
-            ? `Không thấy rõ bàn tay (${Math.round(handCoverage * 100)}% khung hình). Hãy đưa tay vào khung vuông.`
-            : `Chưa đủ chắc chắn (${Math.round(confidence * 100)}%). Hãy giữ ký hiệu ổn định và thử lại.`);
+            ? `Hands are not clearly visible (${Math.round(handCoverage * 100)}% of frames). Put your hands inside the square.`
+            : `Not confident enough (${Math.round(confidence * 100)}%). Hold the sign steadily and try again.`);
           continue;
         }
 
@@ -212,17 +212,17 @@ export default function Home() {
           pendingCandidateRef.current = undefined;
           setQualityHint(undefined);
         } else if (recentlyCommitted) {
-          setQualityHint(`Đã bỏ qua từ lặp “${event.payload.label}”.`);
+          setQualityHint(`Skipped repeated word “${event.payload.label}”.`);
         } else {
-          setQualityHint(`Đang xác nhận “${event.payload.label}”… giữ động tác thêm một nhịp.`);
+          setQualityHint(`Confirming “${event.payload.label}”… hold the gesture a moment longer.`);
         }
       } catch (value) {
         if (runningRef.current) {
-          const message = value instanceof Error ? value.message : 'Không thể nhận diện đoạn video này.';
+          const message = value instanceof Error ? value.message : 'Unable to recognize this video clip.';
           setError(message);
           setPipelineLogs((logs) => [
             ...logs.map((log) => ['active', 'pending'].includes(log.status) ? { ...log, status: 'error' as const } : log),
-            { title: 'Pipeline dừng', detail: message, status: 'error' },
+            { title: 'Pipeline stopped', detail: message, status: 'error' },
           ]);
         }
         runningRef.current = false;
@@ -241,7 +241,7 @@ export default function Home() {
     if (!tokens.length) return;
     const rawText = tokens.map((token) => token.label).join(' ');
     setFinalSentence(rawText);
-    setQualityHint('Kết quả được nhận diện trực tiếp trên UNO Q.');
+    setQualityHint('The result was recognized live on UNO Q.');
     if (speechEnabled && !tokens.every((token) => isMultiVslGloss(token.label))) {
       Speech.stop();
       Speech.speak(rawText, { language: 'vi-VN', rate: 0.88 });
@@ -264,8 +264,8 @@ export default function Home() {
     setUploadedFileName(asset.name);
     setProcessedVideoUri(asset.uri);
     setPipelineLogs([
-      { title: '1. Chọn video', detail: `${asset.name} • ${asset.mimeType ?? 'video'}`, status: 'done' },
-      { title: '2. Gửi tới Edge AI', detail: 'Đang tải file và kiểm tra định dạng…', status: 'pending' },
+      { title: '1. Select video', detail: `${asset.name} • ${asset.mimeType ?? 'video'}`, status: 'done' },
+      { title: '2. Send to Edge AI', detail: 'Uploading the file and checking its format…', status: 'pending' },
     ]);
     setFinalSentence(undefined);
     setTokens([]);
@@ -294,24 +294,24 @@ export default function Home() {
       const milliseconds = (key: string) =>
         `${Math.round(Number(diagnostics[key] ?? 0))} ms`;
       setPipelineLogs([
-        { title: '1. Chọn video', detail: `${asset.name} • ${asset.mimeType ?? 'video'}`, status: 'done' },
+        { title: '1. Select video', detail: `${asset.name} • ${asset.mimeType ?? 'video'}`, status: 'done' },
         {
-          title: '2. Giải mã',
+          title: '2. Decode',
           detail: `${diagnostics.input_frames ?? diagnostics.decoded_frames ?? '—'} frame • ${milliseconds('video_decode_ms')}`,
           status: 'done',
         },
         {
-          title: '3. Lấy mẫu video',
+          title: '3. Sample video',
           detail: `${diagnostics.input_frames ?? diagnostics.decoded_frames ?? '—'} → ${diagnostics.mediapipe_input_frames ?? diagnostics.sampled_frames ?? 16} frame`,
           status: 'done',
         },
         {
-          title: '4. Chuẩn hoá video',
-          detail: 'Pose 33 + hai tay 42 • chuẩn hoá theo vai',
+          title: '4. Normalize video',
+          detail: '33 pose + 42 hand points • shoulder normalized',
           status: 'done',
         },
         {
-          title: '5. Chuỗi keypoint',
+          title: '5. Keypoint sequence',
           detail: `${diagnostics.sampled_frames ?? 48}×75×4 • ${milliseconds('mediapipe_preprocess_ms')}`,
           status: 'done',
         },
@@ -321,21 +321,21 @@ export default function Home() {
           status: 'done',
         },
         {
-          title: '7. Quyết định',
+          title: '7. Decision',
           detail: acceptedUpload
-            ? `${event.payload.label} • ${Math.round(confidence * 100)}% • margin ${Math.round(margin * 100)}% • tổng ${milliseconds('total_request_ms')}`
-            : `Không xác định • top-1 thô: ${event.payload.label} ${Math.round(confidence * 100)}% • margin ${Math.round(margin * 100)}% • tổng ${milliseconds('total_request_ms')}`,
+            ? `${event.payload.label} • ${Math.round(confidence * 100)}% • margin ${Math.round(margin * 100)}% • total ${milliseconds('total_request_ms')}`
+            : `Unknown • raw top-1: ${event.payload.label} ${Math.round(confidence * 100)}% • margin ${Math.round(margin * 100)}% • total ${milliseconds('total_request_ms')}`,
           status: acceptedUpload ? 'done' : 'error',
         },
         {
-          title: '8. Top-3 thô (chỉ tham khảo)',
-          detail: topCandidates || 'Model không trả về danh sách ứng viên.',
+          title: '8. Raw top-3 (reference only)',
+          detail: topCandidates || 'The model did not return a candidate list.',
           status: 'done',
         },
       ]);
       if (!acceptedUpload) {
         setQualityHint(
-          `Không xác định — “${event.payload.label}” chỉ là top-1 thô ${Math.round(confidence * 100)}%, không phải kết quả được chấp nhận. Video “${asset.name}” có thể khác miền dữ liệu VSL2 hoặc cách thực hiện ký hiệu chưa khớp mẫu train.`,
+          `Unknown — “${event.payload.label}” is only the raw top-1 at ${Math.round(confidence * 100)}%, not an accepted result. Video “${asset.name}” may differ from the VSL2 data domain or the sign may not match the training samples.`,
         );
         return;
       }
@@ -347,13 +347,13 @@ export default function Home() {
       };
       setTokens([token]);
       setFinalSentence(displayGloss(token.label));
-      setQualityHint(`Đã nhận diện video “${asset.name}”.`);
+      setQualityHint(`Recognized video “${asset.name}”.`);
     } catch (value) {
-      const message = value instanceof Error ? value.message : 'Không thể nhận diện video đã chọn.';
+      const message = value instanceof Error ? value.message : 'Unable to recognize the selected video.';
       setError(message);
       setPipelineLogs((logs) => [
         ...logs.map((log) => ['active', 'pending'].includes(log.status) ? { ...log, status: 'error' as const } : log),
-        { title: 'Pipeline dừng', detail: message, status: 'error' },
+        { title: 'Pipeline stopped', detail: message, status: 'error' },
       ]);
     } finally {
       setIsProcessing(false);
@@ -365,10 +365,10 @@ export default function Home() {
   const transcript = finalSentence ?? rawSentence;
   const onlyGlossCodes = tokens.length > 0 && tokens.every((token) => isMultiVslGloss(token.label));
   const cameraStatus = isProcessing
-    ? 'Đang phân tích'
+    ? 'Analyzing'
     : isRecognizing
-      ? 'Đang lắng nghe'
-      : 'Sẵn sàng';
+      ? 'Listening'
+      : 'Ready';
   const speakCurrent = () => {
     if (!transcript) return;
     Speech.stop();
@@ -384,16 +384,16 @@ export default function Home() {
           <View style={styles.header}>
             <View>
               <Text style={styles.kicker}>SIGNTALK • UNO Q EDGE AI</Text>
-              <Text style={styles.title}>Phiên dịch trực tiếp</Text>
-              <Text style={styles.subtitle}>Ngôn ngữ ký hiệu thành văn bản và giọng nói.</Text>
+              <Text style={styles.title}>Live translation</Text>
+              <Text style={styles.subtitle}>Sign language to text and speech.</Text>
             </View>
             <View style={styles.headerActions}>
               <View style={styles.systemStatus}>
                 <View style={styles.onlineDot} />
-                <Text style={styles.systemStatusText}>Hệ thống sẵn sàng</Text>
+                <Text style={styles.systemStatusText}>System ready</Text>
               </View>
               <Pressable
-                accessibilityLabel="Mở cài đặt"
+                accessibilityLabel="Open settings"
                 onPress={() => router.push('/settings')}
                 style={styles.iconControl}
               >
@@ -418,12 +418,12 @@ export default function Home() {
                     <View style={styles.permissionIcon}>
                       <Ionicons name="videocam-outline" size={26} color="#E7F7B7" />
                     </View>
-                    <Text style={styles.permissionTitle}>Cho phép truy cập camera</Text>
+                    <Text style={styles.permissionTitle}>Allow camera access</Text>
                     <Text style={styles.permissionCopy}>
-                      Camera được dùng để đọc chuyển động tay. Video chỉ được gửi tới mô hình nhận diện.
+                      The camera reads hand movements. Video is sent only to the recognition model.
                     </Text>
                     <Pressable onPress={() => void enableCamera()} style={styles.permissionButton}>
-                      <Text style={styles.permissionButtonText}>Bật camera</Text>
+                      <Text style={styles.permissionButtonText}>Enable camera</Text>
                     </Pressable>
                   </View>
                 )}
@@ -432,9 +432,9 @@ export default function Home() {
                   <View style={styles.cameraTop}>
                     <View style={styles.liveBadge}>
                       <View style={[styles.liveDot, !isRecognizing && styles.liveDotIdle]} />
-                      <Text style={styles.liveText}>{isRecognizing ? 'ĐANG GHI' : 'XEM TRƯỚC'}</Text>
+                    <Text style={styles.liveText}>{isRecognizing ? 'RECORDING' : 'PREVIEW'}</Text>
                     </View>
-                    <Text style={styles.cameraSource}>VSL-30 • camera trước</Text>
+                    <Text style={styles.cameraSource}>VSL-30 • front camera</Text>
                   </View>
                   <View style={styles.guide}>
                     <View style={[styles.corner, styles.cornerTL]} />
@@ -458,7 +458,7 @@ export default function Home() {
                   <Pressable
                     onPress={() => void enableCamera()}
                   >
-                    <Text style={styles.retryText}>Thử lại</Text>
+                    <Text style={styles.retryText}>Try again</Text>
                   </Pressable>
                 </View>
               ) : null}
@@ -475,11 +475,11 @@ export default function Home() {
                 >
                   <Ionicons name={isRecognizing ? 'stop' : 'play'} size={18} color="#102019" />
                   <Text style={styles.primaryButtonText}>
-                    {isRecognizing ? 'Kết thúc câu' : 'Bắt đầu phiên dịch'}
+                    {isRecognizing ? 'Finish sentence' : 'Start translation'}
                   </Text>
                 </Pressable>
                 <Pressable
-                  accessibilityLabel={speechEnabled ? 'Tắt đọc thành tiếng' : 'Bật đọc thành tiếng'}
+                  accessibilityLabel={speechEnabled ? 'Turn off speech' : 'Turn on speech'}
                   onPress={() => setSpeechEnabled((value) => !value)}
                   style={[styles.secondaryButton, speechEnabled && styles.secondaryButtonActive]}
                 >
@@ -504,10 +504,10 @@ export default function Home() {
                   : <Ionicons name="cloud-upload-outline" size={19} color="#334139" />}
                 <View style={styles.uploadCopy}>
                   <Text style={styles.uploadButtonText}>
-                    {isUploading ? 'Đang xử lý video' : 'Tải video lên để nhận diện'}
+                    {isUploading ? 'Processing video' : 'Upload a video for recognition'}
                   </Text>
                   <Text numberOfLines={1} style={styles.uploadHint}>
-                    {uploadedFileName ?? 'Hỗ trợ MP4, MOV và WebM'}
+                    {uploadedFileName ?? 'Supports MP4, MOV, and WebM'}
                   </Text>
                 </View>
                 <Ionicons name="chevron-forward" size={17} color="#8A948E" />
@@ -516,9 +516,9 @@ export default function Home() {
                 <View style={styles.processedVideoCard}>
                   <View style={styles.processedVideoHeader}>
                     <View>
-                      <Text style={styles.processedVideoTitle}>Video đã xử lý</Text>
+                      <Text style={styles.processedVideoTitle}>Processed video</Text>
                       <Text numberOfLines={1} style={styles.processedVideoCaption}>
-                        {uploadedFileName ?? 'Video đã tải lên'}
+                        {uploadedFileName ?? 'Uploaded video'}
                       </Text>
                     </View>
                     <Ionicons name="checkmark-circle" size={19} color="#6F8D31" />
@@ -530,20 +530,20 @@ export default function Home() {
                 <View style={styles.pipelinePanel}>
                   <View style={styles.pipelineHeader}>
                     <View>
-                      <Text style={styles.pipelineTitle}>Tiến trình UNO Q Edge AI</Text>
-                      <Text style={styles.pipelineSubtitle}>VSL-30 • 75 keypoint • 30 gloss tiếng Việt</Text>
+                      <Text style={styles.pipelineTitle}>UNO Q Edge AI progress</Text>
+                      <Text style={styles.pipelineSubtitle}>VSL-30 • 75 keypoints • 30 Vietnamese glosses</Text>
                     </View>
                     <Pressable
-                      accessibilityLabel={pipelineCollapsed ? 'Hiện tiến trình' : 'Ẩn tiến trình'}
+                      accessibilityLabel={pipelineCollapsed ? 'Show progress' : 'Hide progress'}
                       onPress={() => setPipelineCollapsed((collapsed) => !collapsed)}
                       style={styles.pipelineToggle}
                     >
                       <Ionicons name={pipelineCollapsed ? 'eye-outline' : 'eye-off-outline'} size={16} color="#657168" />
-                      <Text style={styles.pipelineToggleText}>{pipelineCollapsed ? 'Hiện' : 'Ẩn'}</Text>
+                      <Text style={styles.pipelineToggleText}>{pipelineCollapsed ? 'Show' : 'Hide'}</Text>
                     </Pressable>
                   </View>
                   {pipelineCollapsed ? (
-                    <Text style={styles.pipelineCollapsedHint}>Tiến trình đang được ẩn. Nhấn “Hiện” để xem chi tiết.</Text>
+                    <Text style={styles.pipelineCollapsedHint}>Progress is hidden. Tap “Show” to view details.</Text>
                   ) : pipelineLogs.map((log, index) => (
                     <View key={`${log.title}-${index}`} style={[styles.pipelineRow, index > 0 && styles.pipelineRowBorder]}>
                       <View style={[
@@ -569,39 +569,39 @@ export default function Home() {
             <View style={[styles.resultPanel, desktop && styles.resultPanelDesktop]}>
               <View style={styles.resultTop}>
                 <View>
-                  <Text style={styles.panelLabel}>{onlyGlossCodes ? 'MÃ GLOSS DỰ ĐOÁN' : 'BẢN DỊCH'}</Text>
+                  <Text style={styles.panelLabel}>{onlyGlossCodes ? 'PREDICTED GLOSS CODE' : 'TRANSLATION'}</Text>
                 </View>
                 <View style={styles.tokenCount}>
-                  <Text style={styles.tokenCountText}>{tokens.length} từ</Text>
+                  <Text style={styles.tokenCountText}>{tokens.length} words</Text>
                 </View>
               </View>
 
               <View style={styles.transcriptArea}>
                 <Text style={[styles.transcript, !transcript && styles.transcriptEmpty]}>
-                  {transcript || 'Kết quả nhận diện sẽ xuất hiện tại đây.'}
+                  {transcript || 'Recognition results will appear here.'}
                 </Text>
                 {finalSentence && rawSentence ? (
-                  <Text style={styles.rawGloss}>Chuỗi ký hiệu: {rawSentence}</Text>
+                  <Text style={styles.rawGloss}>Sign sequence: {rawSentence}</Text>
                 ) : null}
               </View>
 
               {current ? (
                 <>
                   <Pressable
-                    accessibilityLabel={resultDetailsCollapsed ? 'Hiện chi tiết kết quả' : 'Ẩn chi tiết kết quả'}
+                    accessibilityLabel={resultDetailsCollapsed ? 'Show result details' : 'Hide result details'}
                     onPress={() => setResultDetailsCollapsed((collapsed) => !collapsed)}
                     style={styles.resultDetailsToggle}
                   >
                     <Ionicons name={resultDetailsCollapsed ? 'eye-outline' : 'eye-off-outline'} size={16} color="#657168" />
                     <Text style={styles.resultDetailsToggleText}>
-                      {resultDetailsCollapsed ? 'Hiện chi tiết độ tin cậy' : 'Ẩn chi tiết độ tin cậy'}
+                      {resultDetailsCollapsed ? 'Show confidence details' : 'Hide confidence details'}
                     </Text>
                   </Pressable>
                   {!resultDetailsCollapsed ? <>
                 <View style={styles.confidenceSection}>
                   <View style={styles.confidenceHeading}>
                     <Text style={styles.latestLabel}>
-                      {current.payload.accepted === false ? 'Không xác định' : displayGloss(current.payload.label)}
+                      {current.payload.accepted === false ? 'Unknown' : displayGloss(current.payload.label)}
                     </Text>
                     <Text style={styles.confidenceNumber}>
                       {confidenceValue(current.payload.confidence)}%
@@ -616,13 +616,13 @@ export default function Home() {
                     />
                   </View>
                   <Text style={styles.confidenceCaption}>
-                    {onlyGlossCodes ? 'Mã gloss chưa có bảng tên' : 'Độ tin cậy của từ gần nhất'}
+                    {onlyGlossCodes ? 'Gloss code has no label mapping' : 'Confidence for the latest word'}
                   </Text>
                 </View>
                   {current.payload.topK?.length ? (
                     <View style={styles.candidatesCard}>
                       <View style={styles.candidatesHeading}>
-                        <Text style={styles.candidatesTitle}>Top-3 thô (chỉ tham khảo)</Text>
+                        <Text style={styles.candidatesTitle}>Raw top-3 (reference only)</Text>
                         <Text style={styles.candidatesMeta}>{activeModelId === 'vsl30_keypoint_classifier' ? 'VSL-30 classifier' : 'UNO Q Edge AI'}</Text>
                       </View>
                       {current.payload.topK.slice(0, 3).map((candidate, index) => (
@@ -640,7 +640,7 @@ export default function Home() {
                 <View style={styles.tip}>
                   <Ionicons name="information-circle-outline" size={18} color="#637169" />
                   <Text style={styles.tipText}>
-                    Thực hiện từng ký hiệu rõ ràng, với khoảng nghỉ ngắn giữa các từ.
+                    Perform each sign clearly, with a short pause between words.
                   </Text>
                 </View>
               )}
@@ -666,14 +666,14 @@ export default function Home() {
                   style={[styles.textButton, (!transcript || onlyGlossCodes) && styles.textButtonDisabled]}
                 >
                   <Ionicons name="volume-high-outline" size={18} color="#314039" />
-                  <Text style={styles.textButtonLabel}>Đọc câu</Text>
+                  <Text style={styles.textButtonLabel}>Read sentence</Text>
                 </Pressable>
                 <Pressable
                   onPress={() => router.push('/history' as never)}
                   style={styles.textButton}
                 >
                   <Ionicons name="time-outline" size={18} color="#314039" />
-                  <Text style={styles.textButtonLabel}>Xem lịch sử</Text>
+                  <Text style={styles.textButtonLabel}>View history</Text>
                 </Pressable>
               </View>
             </View>
@@ -681,9 +681,9 @@ export default function Home() {
 
           <View style={styles.recentSection}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Hoạt động gần đây</Text>
+              <Text style={styles.sectionTitle}>Recent activity</Text>
               <Pressable onPress={() => router.push('/history' as never)}>
-                <Text style={styles.sectionLink}>Xem tất cả</Text>
+                <Text style={styles.sectionLink}>View all</Text>
               </Pressable>
             </View>
             <View style={styles.recentList}>
@@ -696,7 +696,7 @@ export default function Home() {
                     <View style={styles.recentCopy}>
                       <Text numberOfLines={1} style={styles.recentText}>{event.payload.text}</Text>
                       <Text style={styles.recentMeta}>
-                        {event.payload.label} • {confidenceValue(event.payload.confidence)}% tin cậy
+                        {event.payload.label} • {confidenceValue(event.payload.confidence)}% confidence
                       </Text>
                     </View>
                     <Ionicons name="chevron-forward" size={17} color="#A0A9A4" />
@@ -704,7 +704,7 @@ export default function Home() {
                 ))
               ) : (
                 <View style={styles.emptyRecent}>
-                  <Text style={styles.emptyRecentText}>Chưa có hoạt động nhận diện.</Text>
+                  <Text style={styles.emptyRecentText}>No recognition activity yet.</Text>
                 </View>
               )}
             </View>
