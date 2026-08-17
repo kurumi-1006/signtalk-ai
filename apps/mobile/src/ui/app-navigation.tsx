@@ -3,8 +3,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { router, usePathname } from 'expo-router';
 
 const items = [
-  { href: '/', icon: 'scan-outline', label: 'Phiên dịch' },
-  { href: '/history', icon: 'time-outline', label: 'Lịch sử' },
+  { href: '/', icon: 'scan-outline', label: 'Translate' },
+  { href: '/history', icon: 'time-outline', label: 'History' },
 ] as const;
 
 export function AppNavigation({ variant = 'bottom' }: { variant?: 'bottom' | 'sidebar' }) {
@@ -44,7 +44,7 @@ export function AppNavigation({ variant = 'bottom' }: { variant?: 'bottom' | 'si
       {sidebar ? (
         <Pressable onPress={() => router.push('/settings')} style={styles.sidebarSettings}>
           <Ionicons name="settings-outline" size={19} color="#7B8580" />
-          <Text style={styles.label}>Cài đặt</Text>
+          <Text style={styles.label}>Settings</Text>
         </Pressable>
       ) : null}
     </View>

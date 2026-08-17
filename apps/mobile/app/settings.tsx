@@ -13,7 +13,7 @@ export default function Settings() {
           <Pressable onPress={() => router.back()} style={styles.iconButton}>
             <Ionicons name="arrow-back" size={20} color="#34433C" />
           </Pressable>
-          <Text style={styles.headerTitle}>Cài đặt</Text>
+          <Text style={styles.headerTitle}>Settings</Text>
           <View style={styles.headerSpacer} />
         </View>
 
@@ -21,26 +21,26 @@ export default function Settings() {
           <View style={styles.avatar}><Text style={styles.avatarText}>Q</Text></View>
           <View style={styles.profileCopy}>
             <Text style={styles.profileName}>UNO Q EDGE AI</Text>
-            <Text style={styles.profileEmail}>Nhận diện trực tiếp trong mạng nội bộ</Text>
+            <Text style={styles.profileEmail}>Live recognition on the local network</Text>
           </View>
           <Ionicons name="chevron-forward" size={18} color="#9AA29E" />
         </View>
 
-        <SectionLabel text="NHẬN DIỆN" />
+        <SectionLabel text="RECOGNITION" />
         <View style={styles.card}>
-          <SettingRow icon="volume-high-outline" title="Đọc kết quả thành tiếng" caption="Đọc câu sau khi nhận diện hoàn tất" value={speech} onChange={setSpeech} />
+          <SettingRow icon="volume-high-outline" title="Speak results aloud" caption="Read the sentence after recognition is complete" value={speech} onChange={setSpeech} />
           <View style={styles.rule} />
-          <SettingRow icon="phone-portrait-outline" title="Phản hồi rung" caption="Rung nhẹ khi có kết quả mới" value={vibration} onChange={setVibration} />
+          <SettingRow icon="phone-portrait-outline" title="Haptic feedback" caption="Vibrate gently when a new result is available" value={vibration} onChange={setVibration} />
         </View>
 
-        <SectionLabel text="HỆ THỐNG" />
+        <SectionLabel text="SYSTEM" />
         <View style={styles.card}>
-          <InfoRow icon="language-outline" title="Ngôn ngữ đầu ra" value="Tiếng Việt" />
+          <InfoRow icon="language-outline" title="Output language" value="Vietnamese" />
           <View style={styles.rule} />
-          <InfoRow icon="hardware-chip-outline" title="Xử lý video" value="Trên UNO Q" />
+          <InfoRow icon="hardware-chip-outline" title="Video processing" value="On UNO Q" />
         </View>
 
-        <Text style={styles.version}>SIGNTALK • Chế độ nhận diện trực tiếp</Text>
+        <Text style={styles.version}>SIGNTALK • Live recognition mode</Text>
       </ScrollView>
     </SafeAreaView>
   );

@@ -17,7 +17,7 @@ export default function Login() {
       setError('');
       router.replace('/');
     } catch {
-      setError('Không thể đăng nhập. Vui lòng kiểm tra lại thông tin.');
+      setError('Unable to sign in. Please check your credentials.');
     } finally {
       setLoading(false);
     }
@@ -29,27 +29,27 @@ export default function Login() {
         <View style={[styles.hero, desktop && styles.heroDesktop]}>
           <View style={styles.logo}><Text style={styles.logoText}>S</Text></View>
           <Text style={styles.brand}>SIGNTALK</Text>
-          <Text style={styles.heroTitle}>Giao tiếp không còn khoảng cách.</Text>
-          <Text style={styles.heroCopy}>Chuyển ngôn ngữ ký hiệu thành văn bản và giọng nói theo thời gian thực.</Text>
+          <Text style={styles.heroTitle}>Communication without barriers.</Text>
+          <Text style={styles.heroCopy}>Turn sign language into text and speech in real time.</Text>
           <View style={styles.featureList}>
-            <Feature icon="scan-outline" text="Nhận diện trực tiếp bằng V6.2" />
-            <Feature icon="chatbubble-ellipses-outline" text="Hoàn thiện câu theo ngữ cảnh" />
-            <Feature icon="volume-high-outline" text="Phát giọng nói tiếng Việt" />
+            <Feature icon="scan-outline" text="Live recognition with V6.2" />
+            <Feature icon="chatbubble-ellipses-outline" text="Context-aware sentence refinement" />
+            <Feature icon="volume-high-outline" text="Vietnamese speech output" />
           </View>
         </View>
 
         <View style={[styles.formPanel, desktop && styles.formPanelDesktop]}>
           <View style={styles.form}>
-            <Text style={styles.formKicker}>CHÀO MỪNG TRỞ LẠI</Text>
-            <Text style={styles.formTitle}>Đăng nhập</Text>
-            <Text style={styles.formSubtitle}>Sử dụng tài khoản SIGNTALK của bạn.</Text>
+            <Text style={styles.formKicker}>WELCOME BACK</Text>
+            <Text style={styles.formTitle}>Sign in</Text>
+            <Text style={styles.formSubtitle}>Use your SIGNTALK account.</Text>
             <Text style={styles.label}>Email</Text>
             <TextInput value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" placeholder="email@example.com" placeholderTextColor="#98A19C" style={styles.input} />
-            <Text style={styles.label}>Mật khẩu</Text>
-            <TextInput value={password} onChangeText={setPassword} secureTextEntry placeholder="Nhập mật khẩu" placeholderTextColor="#98A19C" style={styles.input} />
+            <Text style={styles.label}>Password</Text>
+            <TextInput value={password} onChangeText={setPassword} secureTextEntry placeholder="Enter your password" placeholderTextColor="#98A19C" style={styles.input} />
             {error ? <View style={styles.error}><Ionicons name="alert-circle-outline" size={17} color="#9A4036" /><Text style={styles.errorText}>{error}</Text></View> : null}
             <Pressable disabled={loading} onPress={signIn} style={[styles.button, loading && styles.buttonDisabled]}>
-              {loading ? <ActivityIndicator color="#17231D" /> : <><Text style={styles.buttonText}>Đăng nhập</Text><Ionicons name="arrow-forward" size={17} color="#17231D" /></>}
+              {loading ? <ActivityIndicator color="#17231D" /> : <><Text style={styles.buttonText}>Sign in</Text><Ionicons name="arrow-forward" size={17} color="#17231D" /></>}
             </Pressable>
           </View>
           <Text style={styles.footer}>© 2026 SIGNTALK AI</Text>
