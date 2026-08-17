@@ -1,0 +1,13 @@
+services:
+  edge-ai:
+    build:
+      context: .
+      dockerfile: Dockerfile.edge-ai
+    environment:
+      DEVICE_ID: uno-q-demo
+      ACTIVE_MODEL_ID: vsl30_keypoint_classifier
+      EDGE_HOST: 0.0.0.0
+      EDGE_PORT: "8082"
+      CORS_ORIGINS: "*"
+    ports:
+      - "8082:8082"

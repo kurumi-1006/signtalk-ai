@@ -1,0 +1,19 @@
+{
+  "seed": 42,
+  "seq_len": 48,
+  "n_points": 115,
+  "use_face": true,
+  "face_idx": [],
+  "embedding_dim": 256,
+  "representation": "MediaPipe Holistic normalized structured keypoints; local hand coords + motion + optional hand angles",
+  "unknown_cosine_threshold": 0.8428616523742676,
+  "unknown_margin_threshold": 0.02427084371447563,
+  "dtw_topk": 7,
+  "cosine_weight": 0.78,
+  "dtw_weight": 0.22,
+  "evaluation": {
+    "unseen_glosses": 82,
+    "unseen_support_per_gloss": 1,
+    "note": "single-video classes have no independent same-class test inside this dataset"
+  }
+}

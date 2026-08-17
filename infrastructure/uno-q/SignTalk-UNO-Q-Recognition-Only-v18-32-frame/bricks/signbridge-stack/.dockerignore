@@ -1,0 +1,15 @@
+# Local dependencies, tests, reports, and training artefacts are not needed
+# by either the NestJS service or the low-shot VSL inference service.
+**/node_modules
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/dist
+apps/api/.env
+services/edge-ai/data
+services/edge-ai/tests
+services/edge-ai/scripts
+services/edge-ai/models/multi_vsl_wacv_2025
+services/edge-ai/models/vsl_metric_lowshot/reference_sequences.part*
+services/edge-ai/models/vsl_metric_lowshot/best_vsl_metric_encoder.pt
+services/edge-ai/models/vsl_metric_lowshot/holistic_landmarker.task
