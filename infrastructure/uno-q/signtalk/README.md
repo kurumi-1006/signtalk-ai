@@ -1,4 +1,4 @@
-# SignBridge Full Stack for UNO Q
+# SignTalk Full Stack for UNO Q
 
 Import this ZIP in Arduino App Lab, then press **Run**. App Lab builds and
 starts the custom `signbridge-stack` Docker Brick:
