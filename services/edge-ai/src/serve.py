@@ -34,7 +34,7 @@ def _video_for_inference(source: Path) -> Path:
 def create_app(settings: Settings) -> FastAPI:
     app = FastAPI(title='SignTalk Edge AI')
     app.add_middleware(CORSMiddleware, allow_origins=[origin.strip() for origin in settings.cors_origins.split(',')], allow_credentials=True, allow_methods=['*'], allow_headers=['*'])
-    available_models = definitions(settings.model_path, settings.labels_path)
+    available_models = definitions()
     if settings.active_model_id not in available_models:
         raise ValueError(f'Unknown ACTIVE_MODEL_ID: {settings.active_model_id}')
     active_model_id = settings.active_model_id
