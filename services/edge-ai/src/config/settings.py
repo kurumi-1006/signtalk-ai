@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     mock_mode: bool = True
     model_path: str = './models/vsl_metric_lowshot/best_vsl_metric_encoder.pt'
     labels_path: str = './models/vsl_metric_lowshot/labels.csv'
-    active_model_id: str = 'vsl_metric_lowshot'
+    active_model_id: str = 'vsl30_v4_3'
     edge_host: str = '0.0.0.0'
     edge_port: int = 8081
     cors_origins: str = '*'

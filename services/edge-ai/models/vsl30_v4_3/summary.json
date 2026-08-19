@@ -1,0 +1,205 @@
+{
+  "target_glosses": [
+    "Em",
+    "Anh",
+    "Chị",
+    "Bố",
+    "Nghe",
+    "Nói",
+    "Đi",
+    "Ăn",
+    "Thích",
+    "Muốn",
+    "Cần",
+    "Cho",
+    "Giúp đỡ",
+    "Làm việc",
+    "Nghỉ ngơi",
+    "Thức dậy",
+    "Tiếp tục",
+    "Đồng ý",
+    "Từ chối",
+    "Cảm ơn",
+    "Xin lỗi",
+    "Nhà",
+    "Trường học",
+    "Bệnh viện",
+    "Thành phố",
+    "Siêu thị",
+    "Bây giờ",
+    "Ngày",
+    "Sớm",
+    "Nên"
+  ],
+  "num_classes": 30,
+  "canonical_train_before_val": 1875,
+  "train_final": 3140,
+  "validation": 285,
+  "test": 463,
+  "augmented_train_added": 1550,
+  "blacklist_unique_ids": 86,
+  "mode": "keypoint_only_v4_3",
+  "prediction_head": "main_only",
+  "output_fusion": false,
+  "stage3_enabled": false,
+  "validation_split_method": "stratified_by_gloss_fallback",
+  "signer_mapping_source": "none",
+  "signer_mapping_coverage": 0.0,
+  "stress_validation": true,
+  "training_scope": "30_target_glosses_only",
+  "kp_reconstruction": true,
+  "active_trim": false,
+  "geometry_residual_bone_motion": true,
+  "focus_pair": [
+    "Thích",
+    "Muốn"
+  ],
+  "focus_pair_ce_weight": 0.1,
+  "focus_pair_margin_weight": 0.01,
+  "hard_cluster": [
+    "Thích",
+    "Muốn",
+    "Ăn",
+    "Bố",
+    "Anh"
+  ],
+  "hard_negative_map": {
+    "Thích": [
+      "Muốn",
+      "Anh",
+      "Bố"
+    ],
+    "Muốn": [
+      "Thích",
+      "Anh",
+      "Bố"
+    ],
+    "Ăn": [
+      "Bố",
+      "Anh"
+    ],
+    "Bố": [
+      "Ăn",
+      "Anh",
+      "Muốn"
+    ],
+    "Anh": [
+      "Bố",
+      "Muốn",
+      "Thích"
+    ]
+  },
+  "hard_negative_metric_weight": 0.08,
+  "hard_negative_margin": 0.12,
+  "hard_class_sampling_boosts": {
+    "Thích": 1.3,
+    "Muốn": 1.3,
+    "Ăn": 1.2,
+    "Bố": 1.2,
+    "Anh": 1.15
+  },
+  "selection_weights": {
+    "clean_macro": 0.7,
+    "stress_macro": 0.1,
+    "hard_mean": 0.15,
+    "hard_min": 0.05
+  },
+  "pretrain_checkpoint": "/kaggle/input/datasets/dsfsdfdssdfdsf/output-ca-notebook-train/vsl_train_from_keypoints/export/best_vsl_metric_encoder.pt",
+  "pretrained_tensors_loaded": 64,
+  "best_selection_score": 0.8630154888330686,
+  "best_val_macro_f1": 0.9051985228319189,
+  "best_val_hard_macro_f1": 0.7653041695146958,
+  "best_val_hard_min_f1": 0.5,
+  "best_val_acc": 0.9052631578947369,
+  "best_epoch": 13,
+  "best_stage": 2,
+  "validation_metrics": {
+    "acc": 0.9052631578947369,
+    "balanced_acc": 0.9048681873681873,
+    "macro_f1": 0.9051985228319189,
+    "weighted_f1": 0.9044826058832762,
+    "top3": 0.9754385964912281,
+    "hard_macro_f1": 0.7653041695146958,
+    "hard_min_f1": 0.5
+  },
+  "stress_validation_metrics": {
+    "acc": 0.8982456140350877,
+    "balanced_acc": 0.8958470233470234,
+    "macro_f1": 0.8958089742352092,
+    "weighted_f1": 0.8964592426384833,
+    "top3": 0.9754385964912281,
+    "hard_macro_f1": 0.7271223513328776,
+    "hard_min_f1": 0.4
+  },
+  "development_test_metrics": {
+    "acc": 0.8855291576673866,
+    "balanced_acc": 0.8910119205126944,
+    "macro_f1": 0.8880131437994059,
+    "weighted_f1": 0.8849372348487688,
+    "top3": 0.958963282937365,
+    "hard_macro_f1": 0.7314285714285715,
+    "hard_min_f1": 0.6
+  },
+  "test_metrics": {
+    "acc": 0.8855291576673866,
+    "balanced_acc": 0.8910119205126944,
+    "macro_f1": 0.8880131437994059,
+    "weighted_f1": 0.8849372348487688,
+    "top3": 0.958963282937365,
+    "hard_macro_f1": 0.7314285714285715,
+    "hard_min_f1": 0.6
+  },
+  "focus_pair_validation": {
+    "pair": [
+      "Thích",
+      "Muốn"
+    ],
+    "Thích_total": 10,
+    "Thích_correct": 8,
+    "Thích_to_Muốn": 2,
+    "Muốn_total": 9,
+    "Muốn_correct": 4,
+    "Muốn_to_Thích": 4
+  },
+  "focus_pair_development_test": {
+    "pair": [
+      "Thích",
+      "Muốn"
+    ],
+    "Thích_total": 16,
+    "Thích_correct": 9,
+    "Thích_to_Muốn": 5,
+    "Muốn_total": 16,
+    "Muốn_correct": 13,
+    "Muốn_to_Thích": 2
+  },
+  "methodology_note": "V4.3 design was informed by earlier V4.2 test errors; treat this test as development test. Use a fresh holdout/unseen-signer set for an unbiased final accuracy claim.",
+  "references": {
+    "v3_1": {
+      "acc": 0.8833693304535637,
+      "macro_f1": 0.8835788969139767,
+      "top3": 0.9546436285097192
+    },
+    "v4_1_main": {
+      "acc": 0.8833693304535637,
+      "macro_f1": 0.8875067351415435,
+      "top3": 0.9654427645788337
+    },
+    "v4_2": {
+      "acc": 0.8833693304535637,
+      "macro_f1": 0.8861650580412004,
+      "top3": 0.9546436285097192
+    }
+  },
+  "delta_vs_v4_1_main": {
+    "acc": 0.002159827213822907,
+    "macro_f1": 0.0005064086578623339,
+    "top3": -0.006479481641468721
+  },
+  "delta_vs_v4_2": {
+    "acc": 0.002159827213822907,
+    "macro_f1": 0.0018480857582054977,
+    "top3": 0.004319654427645814
+  },
+  "development_verdict": "V4_3_BEATS_V4_1_MAIN_TOP1"
+}

@@ -23,6 +23,9 @@ services/edge-ai/models/**/*.json
 services/edge-ai/models/multi_vsl_wacv_2025/
 services/edge-ai/models/vsl_metric_lowshot/
 services/edge-ai/models/vsl30_keypoint_classifier/
+!services/edge-ai/models/vsl30_v4_3/
+!services/edge-ai/models/vsl30_v4_3/*.onnx
+!services/edge-ai/models/vsl30_v4_3/*.json
 cache/
 data/
 local_runtime/

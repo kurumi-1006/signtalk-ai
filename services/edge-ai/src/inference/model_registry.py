@@ -40,6 +40,13 @@ def definitions(default_model_path: str, default_labels_path: str) -> dict[str, 
             './models/vsl30_keypoint_classifier/label_map.json',
             'vsl30_keypoint_classifier',
         ),
+        'vsl30_v4_3': ModelDefinition(
+            'vsl30_v4_3',
+            'VSL-30 V4.3 keypoint classifier (30 Vietnamese glosses)',
+            './models/vsl30_v4_3/vsl30_v4_3_main.onnx',
+            './models/vsl30_v4_3/label_map.json',
+            'vsl30_keypoint_classifier',
+        ),
     }
 
 

@@ -40,7 +40,15 @@ class Vsl30KeypointOnnxPredictor:
         self.labels = self._load_labels(label_path)
         self.session = ort.InferenceSession(str(checkpoint_path), providers=['CPUExecutionProvider'])
         input_contract = self.session.get_inputs()[0]
-        if input_contract.name != 'keypoints' or input_contract.shape != [1, SEQ_LEN, N_POINTS, 4]:
+        input_shape = input_contract.shape
+        # V3 exports use a fixed batch dimension of 1 while V4.3 uses a
+        # symbolic batch dimension. Inference always submits one clip, so the
+        # three non-batch dimensions remain the compatibility contract.
+        if (
+            input_contract.name != 'keypoints'
+            or len(input_shape) != 4
+            or input_shape[1:] != [SEQ_LEN, N_POINTS, 4]
+        ):
             raise ValueError(f'Unexpected VSL-30 ONNX input: {input_contract.name} {input_contract.shape}')
         self.model_name = 'VSL-30 keypoint classifier (ONNX CPU, 30 glosses)'
         self.input_names = {'video_or_jpeg_frames'}

@@ -1,6 +1,8 @@
 # Edge AI model artifacts
 
-Do not commit model binaries to Git.
+Model binaries are normally kept out of Git. The deployable VSL-30 V4.3
+artifacts are an intentional exception so a checkout can run the selected
+30-gloss model without an additional download.
 
 ## Multi-VSL MViT-v2 (primary)
 
@@ -103,3 +105,27 @@ to make it the startup model, or select it through `POST /models/vsl30_keypoint_
 For V6.2, one MediaPipe pass creates the raw 76-landmark sequence. The predictor
 derives both the protected legacy preprocessing and the anchor/bounded-gap
 preprocessing from that same sequence.
+
+## VSL-30 V4.3 (default)
+
+`vsl30_v4_3` is the current default 30-gloss keypoint classifier. It uses the
+same MediaPipe preprocessing and ONNX input contract as
+`vsl30_keypoint_classifier`: `float32 [1, 48, 75, 4]` with 33 pose landmarks,
+21 landmarks per hand, and `x/y/z/visibility` channels. The included ONNX
+export has been verified against its PyTorch checkpoint.
+
+The committed deployment bundle is:
+
+```text
+models/vsl30_v4_3/
+  best_vsl30_v4_3.pt
+  vsl30_v4_3_main.onnx
+  label_map.json
+  deployment_config.json
+  export_report.json
+  summary.json
+```
+
+Set `ACTIVE_MODEL_ID=vsl30_v4_3` (the default) or activate it at runtime with
+`POST /models/vsl30_v4_3/activate`. The training and export source is saved in
+`notebooks/VSL30_V4_3_RUN_ALL_TRAIN_EXPORT.ipynb`.
