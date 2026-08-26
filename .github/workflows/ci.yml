@@ -1,0 +1,121 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    name: Frontend quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+  backend:
+    name: Edge AI quality
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/edge-ai
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install backend and development tools
+        run: python -m pip install -e '.[dev]'
+
+      - name: Ruff
+        run: ruff check .
+
+      - name: Mypy
+        run: mypy src
+
+      - name: Compile Python sources
+        run: python -m compileall -q src
+
+      - name: Tests
+        shell: bash
+        run: |
+          set +e
+          pytest -q
+          status=$?
+          if [ "$status" -ne 0 ] && [ "$status" -ne 5 ]; then
+            exit "$status"
+          fi
+          echo "pytest completed with status $status (5 means no tests were collected)."
+
+  docs-and-artifact:
+    name: Docs, notebooks, and App Lab artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate docs, notebooks, and artifact
+        run: |
+          python - <<'PY'
+          import ast
+          import json
+          import pathlib
+          import re
+          import zipfile
+
+          legacy = re.compile(r"signbridge|sign[- ]bridge", re.IGNORECASE)
+          for path in [pathlib.Path("README.md"), *pathlib.Path("services").rglob("*.md")]:
+              text = path.read_text(encoding="utf-8")
+              if legacy.search(text):
+                  raise SystemExit(f"Legacy project name found in {path}")
+
+          for path in pathlib.Path("notebooks").glob("*.ipynb"):
+              notebook = json.loads(path.read_text(encoding="utf-8"))
+              for cell in notebook.get("cells", []):
+                  if cell.get("cell_type") == "code":
+                      ast.parse("".join(cell.get("source", [])), filename=str(path))
+
+          artifact = pathlib.Path("artifacts/SignTalk-AI-UNO-Q-Recognition-Only-VSL30-V4_3.zip")
+          if not artifact.is_file():
+              raise SystemExit(f"Missing App Lab artifact: {artifact}")
+          with zipfile.ZipFile(artifact) as archive:
+              names = archive.namelist()
+              if not any(name.startswith("bricks/signtalk-ai-stack/") for name in names):
+                  raise SystemExit("Artifact does not contain the signtalk-ai-stack Brick")
+              if any(legacy.search(name) for name in names):
+                  raise SystemExit("Artifact contains a legacy project name")
+
+          print("Documentation, notebook syntax, and App Lab artifact checks passed.")
+          PY

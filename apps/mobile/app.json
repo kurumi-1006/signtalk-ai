@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "SIGNTALK AI",
+    "slug": "signtalk-ai",
+    "scheme": "signtalk-ai",
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "SignTalk AI cần camera để nhận diện ngôn ngữ ký hiệu.",
+          "microphonePermission": "SignTalk AI cần microphone khi quay clip nhận diện."
+        }
+      ],
+      "expo-video"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="580" viewBox="0 0 1200 580">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0f172a" flood-opacity="0.14"/>
+    </filter>
+    <linearGradient id="cameraBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#14382e"/>
+      <stop offset="1" stop-color="#0b201b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="580" fill="#0b0f15"/>
+  <rect x="22" y="20" width="1156" height="540" rx="28" fill="#f8fafc"/>
+
+  <!-- App chrome -->
+  <rect x="42" y="38" width="1116" height="72" rx="18" fill="#142b24"/>
+  <rect x="72" y="62" width="24" height="24" rx="8" fill="#d8f58e"/>
+  <text x="84" y="80" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#142b24">S</text>
+  <text x="116" y="82" font-family="Arial, sans-serif" font-size="27" font-weight="700" fill="#ffffff">SignTalk AI</text>
+  <rect x="946" y="59" width="174" height="30" rx="15" fill="#214a3d"/>
+  <circle cx="967" cy="74" r="5" fill="#9ee6b2"/>
+  <text x="981" y="80" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#d8f5df">VSL-30 READY</text>
+
+  <!-- Camera preview -->
+  <rect x="70" y="142" width="650" height="350" rx="20" fill="#10281f" filter="url(#shadow)"/>
+  <text x="100" y="178" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="1.7" fill="#b9d9c4">LIVE CAMERA  /  FRONT CAMERA</text>
+  <circle cx="675" cy="173" r="5" fill="#9ee6b2"/>
+  <rect x="100" y="198" width="590" height="250" rx="14" fill="url(#cameraBg)" stroke="#365f4d" stroke-width="2"/>
+
+  <!-- Framing corners -->
+  <path d="M130 238v-18h24M660 238v-18h-24M130 408v18h24M660 408v18h-24" fill="none" stroke="#d8f58e" stroke-width="3" stroke-linecap="round"/>
+  <text x="166" y="235" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#d8f58e">SIGN DETECTED</text>
+
+  <!-- Person silhouette -->
+  <circle cx="338" cy="286" r="45" fill="#f5c49e"/>
+  <path d="M287 276c-3-47 24-73 55-73 35 0 61 27 56 73-17-17-36-25-55-25-20 0-39 8-56 25z" fill="#2a211f"/>
+  <path d="M276 448v-81c18-29 45-44 72-44s54 15 72 44v81z" fill="#2f6be6"/>
+
+  <!-- Raised signing hand + landmarks -->
+  <path d="M426 383c-9-21-4-43 13-55l18-13 0-70c0-8 6-14 14-14s14 6 14 14v48l5-78c1-8 7-13 15-13s14 6 14 14l-3 77 9-59c1-8 7-13 15-12 8 1 13 7 12 15l-7 67 13-42c2-8 10-12 17-9 7 3 11 10 8 18l-20 72c-7 25-22 43-46 53l-36 15z" fill="#f5c49e" stroke="#ffffff" stroke-opacity="0.75" stroke-width="3"/>
+  <path d="M471 332L485 292 499 308 514 287 527 311 543 296 550 323" fill="none" stroke="#d8f58e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="471" cy="332" r="5" fill="#d8f58e"/><circle cx="485" cy="292" r="5" fill="#d8f58e"/><circle cx="499" cy="308" r="5" fill="#d8f58e"/><circle cx="514" cy="287" r="5" fill="#d8f58e"/><circle cx="527" cy="311" r="5" fill="#d8f58e"/><circle cx="543" cy="296" r="5" fill="#d8f58e"/><circle cx="550" cy="323" r="5" fill="#d8f58e"/>
+  <text x="100" y="476" font-family="Arial, sans-serif" font-size="12" fill="#b9d9c4">Camera frame  →  hand landmarks  →  VSL gloss</text>
+
+  <!-- Recognition result -->
+  <rect x="750" y="142" width="380" height="350" rx="20" fill="#ffffff" stroke="#dce5df" stroke-width="2" filter="url(#shadow)"/>
+  <text x="784" y="184" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="1.7" fill="#718178">RECOGNIZED VIETNAMESE GLOSS</text>
+  <text x="784" y="250" font-family="Arial, sans-serif" font-size="42" font-weight="700" fill="#142b24">Giúp đỡ</text>
+  <text x="784" y="284" font-family="Arial, sans-serif" font-size="16" fill="#718178">VSL-30 V4.3  •  30 Vietnamese classes</text>
+  <line x1="784" y1="313" x2="1096" y2="313" stroke="#e5ece7" stroke-width="2"/>
+  <text x="784" y="346" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#50655a">CONFIDENCE</text>
+  <text x="1096" y="346" text-anchor="end" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#2f8f58">95.4%</text>
+  <rect x="784" y="362" width="312" height="12" rx="6" fill="#e6eee9"/>
+  <rect x="784" y="362" width="298" height="12" rx="6" fill="#4caf70"/>
+  <rect x="784" y="404" width="158" height="36" rx="18" fill="#e1f7e8"/>
+  <circle cx="808" cy="422" r="5" fill="#2f8f58"/>
+  <text x="822" y="427" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#17653a">RECOGNIZED</text>
+  <text x="784" y="468" font-family="Arial, sans-serif" font-size="13" fill="#718178">Vietnamese sign language recognition</text>
+</svg>

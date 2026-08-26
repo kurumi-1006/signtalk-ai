@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620">
+  <rect width="1200" height="620" fill="#0b0f15"/>
+
+  <!-- Header -->
+  <text x="34" y="50" fill="#f4f6fb" font-family="Arial, sans-serif" font-size="25" font-weight="700">2. Schematic Diagram</text>
+  <line x1="34" y1="78" x2="1166" y2="78" stroke="#2b313c" stroke-width="2"/>
+
+  <!-- Camera -->
+  <text x="76" y="112" fill="#f4f6fb" font-family="Arial, sans-serif" font-size="19" font-weight="700">USB Camera</text>
+  <rect x="82" y="150" width="120" height="88" rx="22" fill="#53638f"/>
+  <circle cx="142" cy="194" r="34" fill="#0b0f15" stroke="#a7b4df" stroke-width="7"/>
+  <circle cx="142" cy="194" r="11" fill="#a7b4df"/>
+  <rect x="118" y="238" width="48" height="15" rx="4" fill="#53638f"/>
+  <path d="M100 253h84" stroke="#53638f" stroke-width="13" stroke-linecap="round"/>
+  <path d="M142 253v53" stroke="#53638f" stroke-width="13" stroke-linecap="round"/>
+  <text x="42" y="338" fill="#aebae3" font-family="Arial, sans-serif" font-size="15">JPEG frames</text>
+  <text x="48" y="362" fill="#aebae3" font-family="Arial, sans-serif" font-size="15">or video</text>
+
+  <!-- Frontend laptop -->
+  <text x="367" y="112" fill="#f4f6fb" font-family="Arial, sans-serif" font-size="19" font-weight="700">Frontend Device</text>
+  <rect x="315" y="143" width="300" height="190" rx="17" fill="#cbd2e3" stroke="#66759e" stroke-width="7"/>
+  <rect x="338" y="166" width="254" height="144" rx="7" fill="#182131"/>
+  <text x="363" y="199" fill="#f4f6fb" font-family="Arial, sans-serif" font-size="17" font-weight="700">SIGNTALK AI</text>
+  <text x="363" y="229" fill="#c8d3f4" font-family="Arial, sans-serif" font-size="15">Expo / React Native</text>
+  <text x="363" y="257" fill="#c8d3f4" font-family="Arial, sans-serif" font-size="15">Camera + video input</text>
+  <text x="363" y="285" fill="#9ee6b2" font-family="Arial, sans-serif" font-size="15">Live translation UI</text>
+  <path d="M278 354h374l28 27H250z" fill="#8c95a8"/>
+
+  <!-- Camera to frontend link -->
+  <path d="M142 306V420H300" fill="none" stroke="#5a70c8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M288 410l16 10-16 10" fill="none" stroke="#5a70c8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="188" y="402" fill="#aebae3" font-family="Arial, sans-serif" font-size="14">USB video</text>
+
+  <!-- Network request / response -->
+  <text x="650" y="145" fill="#d3dcff" font-family="Arial, sans-serif" font-size="15">LAN / HTTP</text>
+  <text x="650" y="165" fill="#8f9ac5" font-family="Arial, sans-serif" font-size="14">POST /predict</text>
+  <line x1="650" y1="185" x2="778" y2="185" stroke="#5a70c8" stroke-width="7" stroke-linecap="round"/>
+  <path d="M766 175l18 10-18 10" fill="none" stroke="#5a70c8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <line x1="778" y1="420" x2="650" y2="420" stroke="#70a457" stroke-width="7" stroke-linecap="round"/>
+  <path d="M662 410l-18 10 18 10" fill="none" stroke="#70a457" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="650" y="450" fill="#b4d49e" font-family="Arial, sans-serif" font-size="14">JSON recognition response</text>
+
+  <!-- UNO Q -->
+  <text x="908" y="112" fill="#f4f6fb" font-family="Arial, sans-serif" font-size="19" font-weight="700">Arduino UNO Q</text>
+  <rect x="805" y="143" width="330" height="250" rx="17" fill="#111a24" stroke="#66759e" stroke-width="6"/>
+  <rect x="832" y="170" width="276" height="196" rx="10" fill="#173c44" stroke="#70a457" stroke-width="3"/>
+  <rect x="932" y="218" width="98" height="55" rx="6" fill="#293847" stroke="#a7b4df" stroke-width="3"/>
+  <text x="951" y="251" fill="#f4f6fb" font-family="Arial, sans-serif" font-size="16" font-weight="700">UNO Q</text>
+  <circle cx="865" cy="208" r="8" fill="#70a457"/><circle cx="865" cy="242" r="8" fill="#70a457"/><circle cx="865" cy="276" r="8" fill="#70a457"/>
+  <text x="845" y="318" fill="#d6e8c7" font-family="Arial, sans-serif" font-size="14">signtalk-ai-stack Brick</text>
+  <text x="845" y="340" fill="#d6e8c7" font-family="Arial, sans-serif" font-size="14">MediaPipe Holistic</text>
+  <text x="845" y="362" fill="#d6e8c7" font-family="Arial, sans-serif" font-size="14">VSL-30 V4.3 ONNX • :8082</text>
+
+  <!-- Legend, matching the reference layout -->
+  <text x="52" y="492" fill="#f4f6fb" font-family="Arial, sans-serif" font-size="16">1. USB Camera</text>
+  <text x="270" y="492" fill="#f4f6fb" font-family="Arial, sans-serif" font-size="16">2. Expo / React Native Frontend</text>
+  <text x="650" y="492" fill="#f4f6fb" font-family="Arial, sans-serif" font-size="16">3. Arduino UNO Q Edge AI</text>
+  <text x="52" y="535" fill="#aebae3" font-family="Arial, sans-serif" font-size="15">4. Camera → frontend → LAN / HTTP /predict → label, confidence, and diagnostics</text>
+</svg>

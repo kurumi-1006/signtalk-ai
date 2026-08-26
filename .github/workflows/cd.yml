@@ -1,0 +1,51 @@
+name: CD - SignTalk AI release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to create, for example v1.0.0
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Publish App Lab release
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+      ARTIFACT: artifacts/SignTalk-AI-UNO-Q-Recognition-Only-VSL30-V4_3.zip
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate release artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f "$ARTIFACT"
+          unzip -t "$ARTIFACT"
+          unzip -Z1 "$ARTIFACT" | grep -q '^bricks/signtalk-ai-stack/'
+          if unzip -Z1 "$ARTIFACT" | grep -Eiq 'signbridge|sign[- ]bridge'; then
+            echo 'The release artifact contains a legacy project name.' >&2
+            exit 1
+          fi
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release create "$RELEASE_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "SignTalk AI $RELEASE_TAG" \
+            --generate-notes \
+            "$ARTIFACT"

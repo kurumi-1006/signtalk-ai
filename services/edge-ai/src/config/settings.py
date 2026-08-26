@@ -1,0 +1,13 @@
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file='.env', extra='ignore')
+    log_level: str = 'INFO'
+    mock_mode: bool = True
+    edge_host: str = '0.0.0.0'
+    edge_port: int = 8081
+    cors_origins: str = '*'
+    min_word_confidence: float = 0.62
+    min_word_margin: float = 0.10
+    min_landmark_coverage: float = 0.5

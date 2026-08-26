@@ -1,0 +1,28 @@
+{
+  "best_checkpoint": {
+    "path": "best_vsl30_v4_3.pt",
+    "epoch": 13,
+    "stage": 2,
+    "sha256": "473366fa7ff4b292752363f189de96c0547f26ac5d6d52207ab952a31da5ebf7"
+  },
+  "deploy_pt": {
+    "path": "vsl30_v4_3_main_head_state.pt",
+    "size_mb": 8.171174049377441,
+    "sha256": "f27509faf804f750de624ffc521f1adc83ab4befeebb2c9231d43ba69a465766"
+  },
+  "torchscript": {
+    "path": "vsl30_v4_3_main_head.ts",
+    "size_mb": 7.646764755249023,
+    "sha256": "8f9c4b69383ca996e744ca728f2eb9a537ac811f375dda58a74b476e6d521856",
+    "max_abs_diff": 0.0,
+    "top1_identical": true
+  },
+  "onnx": {
+    "path": "vsl30_v4_3_main.onnx",
+    "size_mb": 8.035469055175781,
+    "sha256": "a374163bfc2c958f372094b22070a50e696395ea10a54d83471f49e24468ae39",
+    "max_abs_diff": 4.291534423828125e-06,
+    "top1_identical": true,
+    "opset": 17
+  }
+}
