@@ -246,6 +246,8 @@ pnpm dev:web
 
 When the application is running, enable the camera, start translation, and perform one of the 30 trained glosses in the camera frame.
 
+[Watch the SignTalk AI demo on YouTube](https://youtu.be/svj913kS0zk).
+
 ![N|Solid](Images/signtalk_ai_live_demo.jpg)
 
 ![N|Solid](Images/signtalk_ai_demo_output_ui.png)
